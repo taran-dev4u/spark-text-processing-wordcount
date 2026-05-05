@@ -8,28 +8,34 @@ This project keeps the classic distributed word-count exercise but names it clea
 
 The scope is intentionally small, but it demonstrates the core pattern behind many larger distributed text pipelines.
 
-## Problem
+## Project Objective
 
 Raw text frequency output is noisy when case, punctuation, and stop words are not handled. A useful pipeline needs both the distributed processing pattern and the preprocessing decisions that make the result readable.
 
-## Scope
+## Completed Scope
 
 - Basic distributed word count
 - Case normalization and punctuation handling
 - Stopword filtering
 - Sorted frequency output and interpretation
 
-## Approach
+## Workflow
 
 - Loaded multiple text files as one corpus
 - Tokenized text into countable terms
 - Reduced terms into frequency counts
 - Compared raw and cleaned outputs
 
-## Existing Work
+## Deliverables
 
 - Report covering basic and extended word-count implementation
 - Analysis notes for frequency output and preprocessing impact
+
+## Repository Contents
+
+- `README.md` - project overview, workflow, deliverables, and skills summary
+- `project-files/masters/dmql_taranmam_50604177.pdf` - project artifact
+- `project-files/README.md` - manifest of uploaded project materials
 
 ## Contribution
 
@@ -42,14 +48,6 @@ Implemented and analyzed the text-processing workflow with basic and extended pr
 - Text processing
 - Python
 - Data engineering
-
-## Next Update
-
-- Add scripts and sample inputs
-- Add expected output files
-- Document preprocessing changes and their effect on results
-
-The implementation files are stored separately and will be added after the source folders are reviewed and organized.
 
 ## Topics
 
