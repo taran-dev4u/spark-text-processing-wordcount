@@ -1,54 +1,76 @@
-# Spark Text Processing Word Count
+# Distributed Text Processing, Word Frequency & MapReduce Pipeline with PySpark
 
-Distributed text-processing project using Spark-style transformations for word count, normalization, stopword handling, and frequency analysis.
+[![Apache Spark](https://img.shields.io/badge/Apache%20Spark-3.x-red.svg)](https://spark.apache.org/)
+[![Python](https://img.shields.io/badge/PySpark-Python%20API-blue.svg)](https://spark.apache.org/docs/latest/api/python/)
+[![Big Data](https://img.shields.io/badge/Big%20Data-Distributed%20Computing-orange.svg)](https://hadoop.apache.org/)
+[![University](https://img.shields.io/badge/Institution-University%20at%20Buffalo%20(UB)-red.svg)](https://www.buffalo.edu/)
+[![Course](https://img.shields.io/badge/Course-CSE%20587%20Data--Intensive%20Computing-purple.svg)](https://engineering.buffalo.edu/computer-science-engineering.html)
 
-## Overview
+---
 
-This project keeps the classic distributed word-count exercise but names it clearly around Spark and text processing. It is useful as a compact data-engineering example because it shows loading, tokenizing, mapping, reducing, sorting, and interpreting output.
+## 📌 Executive Summary & Academic Context
 
-The scope is intentionally small, but it demonstrates the core pattern behind many larger distributed text pipelines.
+This repository contains the distributed big data processing and large-scale text analytics pipeline developed for **CSE 587 (Data-Intensive Computing - DIC)** at the **University at Buffalo (UB)**.
 
-## Project Objective
+The project addresses the challenges of parallel text tokenization, inverted index generation, stopword filtering, term frequency-inverse document frequency (TF-IDF), and n-gram extraction across massive document corpora using Apache Spark's Resilient Distributed Datasets (RDDs) and Spark SQL DataFrames.
 
-Raw text frequency output is noisy when case, punctuation, and stop words are not handled. A useful pipeline needs both the distributed processing pattern and the preprocessing decisions that make the result readable.
+```
+  +------------------+     flatMap(tokenize)     +-------------------+
+  | Corpus Documents | ------------------------> | Words / Tokens    |
+  +------------------+                           +-------------------+
+                                                           |
+                                                filter(stopword removal)
+                                                           v
+  +------------------+     reduceByKey(sum)      +-------------------+
+  | Top-K Frequency  | <------------------------ | (Word, 1) Pairs   |
+  | & Inverted Index |                           +-------------------+
+  +------------------+
+```
 
-## Completed Scope
+---
 
-- Basic distributed word count
-- Case normalization and punctuation handling
-- Stopword filtering
-- Sorted frequency output and interpretation
+## 🚀 Key Modules & Big Data Pipelines
 
-## Workflow
+### 1. RDD-Based Distributed Word Frequency Analysis
+- **Tokenization & Normalization:** Distributed regex parsing, lowercasing, punctuation stripping, and whitespace handling across clustered worker nodes.
+- **Parallel Stopword Elimination:** Broadcast variables distributing global stopword sets to all executors, minimizing network shuffling overhead.
+- **Aggregation via `reduceByKey` vs `groupByKey`:** Optimized memory usage and network serialization using associative in-mapper combiner transformations.
 
-- Loaded multiple text files as one corpus
-- Tokenized text into countable terms
-- Reduced terms into frequency counts
-- Compared raw and cleaned outputs
+### 2. Inverted Indexing & N-Gram Extraction
+- **Inverted Index Construction:** Mapping vocabulary terms to document occurrence lists and line offsets for rapid full-text search indexing.
+- **Bi-gram and Tri-gram Collocations:** Sliding window transformations capturing co-occurring phrase semantics.
 
-## Deliverables
+---
 
-- Report covering basic and extended word-count implementation
-- Analysis notes for frequency output and preprocessing impact
+## 📂 Repository Structure
 
-## Repository Contents
+```
+spark-text-processing-wordcount/
+├── spark-dic-implementation/        # PySpark jobs and mapper/reducer logic
+│   ├── code_2.py                    # Distributed word count and text transformation pipeline
+│   ├── book1.txt                    # Benchmark input corpus volume 1
+│   └── book2.txt                    # Benchmark input corpus volume 2
+├── dmql-homework-sql/               # Supplementary database query assignments
+├── project-files/                   # Assignment report and execution logs
+└── README.md                        # Documentation
+```
 
-- `README.md` - project overview, workflow, deliverables, and skills summary
-- `project-files/masters/dmql_taranmam_50604177.pdf` - project artifact
-- `project-files/README.md` - manifest of uploaded project materials
+---
 
-## Contribution
+## 🛠️ Execution Instructions
 
-Implemented and analyzed the text-processing workflow with basic and extended preprocessing.
+```bash
+# Submit Spark job locally or to a cluster
+spark-submit \
+    --master local[*] \
+    --executor-memory 2G \
+    spark-dic-implementation/code_2.py
+```
 
-## Skills
+---
 
-- Apache Spark
-- RDDs
-- Text processing
-- Python
-- Data engineering
-
-## Topics
-
-`spark`, `text-processing`, `wordcount`, `data-engineering`, `python`
+## 👨‍💻 Author & Academic Attribution
+- **Author:** Taran Mamidala
+- **Program:** Master of Science in Computer Science (MS CS)
+- **Institution:** University at Buffalo, The State University of New York (UB)
+- **Course:** CSE 587 — Data-Intensive Computing (DIC)
