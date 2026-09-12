@@ -1,24 +1,119 @@
-# Distributed Text Processing & MapReduce with PySpark
+# Distributed Text Processing & MapReduce Analytics
 
-Big data processing and text analytics pipelines developed for CSE 587 (Data-Intensive Computing). Implements parallel text tokenization, stopword filtering, inverted index creation, and word frequency analysis using Apache Spark RDDs and Spark SQL.
+Parallel text tokenization, inverted indexing, TF-IDF calculation, and graph analytics pipelines built with PySpark and streaming MapReduce abstractions.
 
-## Features & Implementation
+## Architecture & Modules
 
-- **Distributed Word Count:** RDD `flatMap` tokenization, lowercase/punctuation cleaning, and `reduceByKey` aggregations across worker nodes.
-- **Stopword Filtering:** Broadcast variables sharing stopword sets to executors to minimize network shuffle overhead.
-- **Inverted Indexing:** Mapping terms to document locations and line offsets for search indexing.
+The repository provides a Python package (`spark_text`) for text mining, document retrieval, and network graph analysis:
 
-## Structure
+- `spark_text.pipeline.TextProcessor`: Normalizes strings, strips punctuation, handles custom stopword sets, and extracts n-grams.
+- `spark_text.pipeline.WordCountAggregator`: Streaming MapReduce word frequency aggregation with corpus metrics (vocabulary size, hapax legomena, frequency distributions).
+- `spark_text.pipeline.InvertedIndex`: Positional and term-level inverted indexing supporting boolean `AND` / `OR` document queries.
+- `spark_text.pipeline.TFIDFCalculator`: Smoothed term frequency - inverse document frequency computation across document sets.
+- `spark_text.graph`: Random weighted network generation, directed adjacency structures, and iterative power-method PageRank.
+- `spark_text.cli`: Command-line interface with `count`, `index`, and `pagerank` subcommands.
 
-- `spark-dic-implementation/code_2.py` — PySpark transformation pipeline.
-- `spark-dic-implementation/` — Benchmark corpora (`book1.txt`, `book2.txt`).
-- `dic_coursework_and_problem_specs/` — Course project specifications (`487 Phase 1 & 2 Description.pdf`) and report (`dmql_taranmam_50604177.pdf`).
+## Installation
 
-## Running the Spark Job
+Requires Python 3.9+.
+
+```bash
+git clone https://github.com/taran-dev4u/spark-text-processing-wordcount.git
+cd spark-text-processing-wordcount
+pip install -e .
+```
+
+To install test dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Quick Start
+
+### Python API
+
+```python
+from spark_text.pipeline import TextProcessor, WordCountAggregator, DEFAULT_STOPWORDS
+
+processor = TextProcessor(lowercase=True, stopwords=DEFAULT_STOPWORDS)
+aggregator = WordCountAggregator(processor)
+
+lines = [
+    "Apache Spark provides in-memory cluster computing.",
+    "MapReduce processes datasets across distributed nodes.",
+]
+
+counts = aggregator.count_lines(lines)
+top_words = aggregator.top_k(counts, k=5)
+print(top_words)
+```
+
+### Inverted Indexing & Search
+
+```python
+from spark_text.pipeline import InvertedIndex, TextProcessor
+
+index = InvertedIndex(TextProcessor())
+index.add_document("doc1", "Distributed storage and cluster computing")
+index.add_document("doc2", "Fault tolerant distributed systems")
+
+matches = index.search(["distributed", "computing"], operator="AND")
+print(matches)  # {'doc1'}
+```
+
+### Command-Line Interface
+
+Run word count frequency analysis with stopword filtering on a text file:
+
+```bash
+spark-text count --input spark-dic-implementation/book1.txt --top-k 10 --stopwords
+```
+
+Output corpus statistics and frequency table as structured JSON:
+
+```bash
+spark-text count --input spark-dic-implementation/book1.txt --top-k 5 --stopwords --json
+```
+
+Query multiple documents using the inverted index:
+
+```bash
+spark-text index --files spark-dic-implementation/book1.txt spark-dic-implementation/book2.txt --query emperor voyage --operator AND
+```
+
+Run iterative PageRank simulation:
+
+```bash
+spark-text pagerank --nodes 20 --damping 0.85 --top-k 5
+```
+
+## Running Spark Notebooks & Jobs
+
+For distributed cluster execution via Apache Spark:
+
+- `spark-dic-implementation/spark_text_processing_dic.ipynb`: PySpark RDD transformations, shuffle metrics, and execution graph evaluation.
+- Benchmark corpora are located in `spark-dic-implementation/` (`book1.txt`, `book2.txt`).
+
+Submit a standalone Spark batch job:
 
 ```bash
 spark-submit \
     --master local[*] \
     --executor-memory 2G \
     spark-dic-implementation/code_2.py
+```
+
+## Testing
+
+Run the test suite covering tokenization, indexing, TF-IDF, graph algorithms, and CLI subcommands:
+
+```bash
+pytest tests/ -v
+```
+
+Linting check:
+
+```bash
+ruff check .
 ```

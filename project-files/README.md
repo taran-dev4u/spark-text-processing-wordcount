@@ -2,6 +2,6 @@
 
 These files are the available local project materials for this repository.
 
-| File | Local Source |
+| File | Description |
 | --- | --- |
-| `project-files/masters/dmql_taranmam_50604177.pdf` | `MASTERS/dmql_taranmam_50604177.pdf` |
+| `project-files/masters/dmql_distributed_query_report.pdf` | Distributed query and data management laboratory report |

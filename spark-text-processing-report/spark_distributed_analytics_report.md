@@ -2,9 +2,7 @@
 ---
 ---
 
-  #### **Student name :** ***`Taran Mamidala`*** | **Person No. :**  ***`50604177`***
-
-  #### **Email :** ***`taranmam@buffalo.edu`***	| **UBID :** ***`taranmam`*** 
+  #### **Author :** ***`Taran Mamidala`*** 
 
 <hr>
 

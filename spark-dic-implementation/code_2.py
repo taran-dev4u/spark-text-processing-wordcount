@@ -1,5 +1,6 @@
 import random
 
+
 # Function to generate random weights for edges
 def generate_weights(num_nodes):
     weights = []
@@ -12,8 +13,7 @@ def generate_weights(num_nodes):
 # Function to write edges with random weights to a text file
 def write_weights_to_file(weights, filename):
     with open(filename, "w") as file:
-        for edge in weights:
-            file.write("{}, {}, {}\n".format(edge[0], edge[1], edge[2]))
+        file.writelines(f"{edge[0]}, {edge[1]}, {edge[2]}\n" for edge in weights)
     print(f"Random weights saved to {filename}")
 
 # Main function
